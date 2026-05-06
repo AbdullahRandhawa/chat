@@ -70,6 +70,7 @@ const Chat = ({ setMobileView, showBackButton = true, showInfoButton = true }) =
         setAttachments(prev => prev.filter((_, i) => i !== index));
     };
 
+    // Sends a message to Firestore 'chats' and updates 'userchats' for both parties.
     const handleSend = async () => {
         if ((text === "" && attachments.length === 0) || isSending) return;
 
@@ -91,7 +92,7 @@ const Chat = ({ setMobileView, showBackButton = true, showInfoButton = true }) =
             const uploadedFiles = await Promise.all(uploadPromises);
 
             const newMessages = [];
-            
+
             // Add image/file bubbles first
             uploadedFiles.forEach((file, index) => {
                 newMessages.push({
@@ -141,6 +142,7 @@ const Chat = ({ setMobileView, showBackButton = true, showInfoButton = true }) =
                             }
                         }
 
+                        // Updates the preview text and timestamp in the sidebar (userchats).
                         userChatsData.chats[chatIndex].lastMessage = lastMsgText;
                         userChatsData.chats[chatIndex].isSeen = id === currentUser.id;
                         userChatsData.chats[chatIndex].updatedAt = Date.now();

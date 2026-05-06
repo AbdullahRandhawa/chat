@@ -14,6 +14,8 @@ const Chatlist = ({ setMobileView }) => {
     const { currentUser } = useUserStore()
     const { changeChat } = useChatStore()
 
+    // [getRecentChats]
+    // Subscribes to the user's Firestore 'userchats' document to fetch the current inbox list.
     useEffect(() => {
         const unSub = onSnapshot(doc(db, "userchats", currentUser.id), async (res) => {
             const data = res.data();

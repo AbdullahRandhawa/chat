@@ -1,3 +1,11 @@
+/* 
+   ══════════════════════════════════════════════════════════════════════════════
+   ENTITY MANAGEMENT: FIRESTORE (Chats, User chats)
+   ══════════════════════════════════════════════════════════════════════════════
+   This component handles the creation of actual conversation documents in the 
+   'chats' collection and links them to both participants via the 'userchats' 
+   collection, as defined in the ER diagram.
+*/
 import { arrayUnion, collection, doc, getDocs, getDoc, query, serverTimestamp, setDoc, updateDoc, where } from "firebase/firestore"
 import "./addUser.css"
 import { useState } from "react"
@@ -81,6 +89,7 @@ const AddUser = ({ onClose }) => {
                 }
             }
 
+            // ─── ENTITY CREATION: CHATS ───
             const newChatRef = doc(chatRef)
             await setDoc(newChatRef, {
                 createdAt: serverTimestamp(),
@@ -92,6 +101,7 @@ const AddUser = ({ onClose }) => {
 
             if (selectedUserChatsDoc.exists()) {
                 // Document exists, update it
+                // ─── ENTITY UPDATE: USERCHATS (Receiver) ───
                 await updateDoc(doc(userChatsRef, selectedUser.id), {
                     chats: arrayUnion({
                         chatId: newChatRef.id,
@@ -117,6 +127,7 @@ const AddUser = ({ onClose }) => {
 
             if (currentUserChatsDocCheck.exists()) {
                 // Document exists, update it
+                // ─── ENTITY UPDATE: USERCHATS (Current User) ───
                 await updateDoc(doc(userChatsRef, currentUser.id), {
                     chats: arrayUnion({
                         chatId: newChatRef.id,
